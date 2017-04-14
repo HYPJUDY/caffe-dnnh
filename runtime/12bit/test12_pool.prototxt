@@ -1,0 +1,818 @@
+name: "CIFAR10_full"
+layer {
+  name: "cifar"
+  type: "Data"
+  top: "data/cifar"
+  data_param {
+    source: "../cifar_hash_dataset/cifar_pool_lvdb"
+    batch_size: 100
+  }
+  transform_param {
+    mean_file: "../cifar_hash_dataset/cifar_triplet_mean.bin" 
+  }
+  include: { phase: TEST }
+}
+
+
+#--- Slice ---#
+
+layer {name: "slice_triplet" type: "Slice" bottom: "data/cifar"
+       top: "data" top: "data_2" top: "data_3"
+       slice_param {slice_dim: 1 slice_point: 3 slice_point:6}}
+
+#--- Stream 1---#
+
+layer {
+  name: "conv1/cifar"
+  type: "Convolution"
+  bottom: "data"
+  top: "conv1/cifar"
+  param {
+    name: "conv1_w"
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    name: "conv1_b"
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 96
+    kernel_size: 5
+    stride: 1
+    pad: 2
+    weight_filler {
+      type: "gaussian"
+      std: 0.05
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+layer {
+  name: "relu1/cifar"
+  type: "ReLU"
+  bottom: "conv1/cifar"
+  top: "conv1/cifar"
+}
+layer {
+  name: "cccp1/cifar"
+  type: "Convolution"
+  bottom: "conv1/cifar"
+  top: "cccp1/cifar"
+  param {
+    name: "cccp1_w"
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    name: "cccp1_b"
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 96
+    kernel_size: 1
+    weight_filler {
+      type: "gaussian"
+      std: 0.05
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+layer {
+  name: "relu2/cifar"
+  type: "ReLU"
+  bottom: "cccp1/cifar"
+  top: "cccp1/cifar"
+}
+layer {
+  name: "pool1/cifar"
+  type: "Pooling"
+  bottom: "cccp1/cifar"
+  top: "pool1/cifar"
+  pooling_param {
+    pool: MAX
+    kernel_size: 3
+    stride: 2
+  }
+}
+
+layer {
+  name: "drop1/cifar"
+  type: "Dropout"
+  bottom: "pool1/cifar"
+  top: "pool1/cifar"
+  dropout_param {
+    dropout_ratio: 0.5
+  }
+}
+
+layer {
+  name: "conv2/cifar"
+  type: "Convolution"
+  bottom: "pool1/cifar"
+  top: "conv2/cifar"
+  param {
+    name: "conv2_w"
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    name: "conv2_b"
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 256
+    pad: 2
+    kernel_size: 5
+    stride: 1
+    weight_filler {
+      type: "gaussian"
+      std: 0.01
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+layer {
+  name: "relu4/cifar"
+  type: "ReLU"
+  bottom: "conv2/cifar"
+  top: "conv2/cifar"
+}
+layer {
+  name: "cccp3/cifar"
+  type: "Convolution"
+  bottom: "conv2/cifar"
+  top: "cccp3/cifar"
+  param {
+    name: "cccp3_w"
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    name: "cccp3_b"
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 256
+    kernel_size: 1
+    weight_filler {
+      type: "gaussian"
+      std: 0.05
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+layer {
+  name: "relu5/cifar"
+  type: "ReLU"
+  bottom: "cccp3/cifar"
+  top: "cccp3/cifar"
+}
+layer {
+  name: "pool2/cifar"
+  type: "Pooling"
+  bottom: "cccp3/cifar"
+  top: "pool2/cifar"
+  pooling_param {
+    pool: MAX
+    kernel_size: 3
+    stride: 2
+  }
+}
+
+layer {
+  name: "conv3/cifar"
+  type: "Convolution"
+  bottom: "pool2/cifar"
+  top: "conv3/cifar"
+  param {
+    name: "conv3_w"
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    name: "conv3_b"
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 384
+    #pad: 1
+    kernel_size: 1
+    group: 1
+    weight_filler {
+      type: "gaussian"
+      std: 0.01
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+layer {
+  name: "relu7/cifar"
+  type: "ReLU"
+  bottom: "conv3/cifar"
+  top: "conv3/cifar"
+}
+layer {
+  name: "cccp5/cifar"
+  type: "Convolution"
+  bottom: "conv3/cifar"
+  top: "cccp5/cifar"
+  param {
+    name: "cccp5_w"
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    name: "cccp5_b"
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 384
+    kernel_size: 1
+    weight_filler {
+      type: "gaussian"
+      std: 0.05
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+layer {
+  name: "relu8/cifar"
+  type: "ReLU"
+  bottom: "cccp5/cifar"
+  top: "cccp5/cifar"
+}
+layer {
+  name: "pool3/cifar"
+  type: "Pooling"
+  bottom: "cccp5/cifar"
+  top: "pool3/cifar"
+  pooling_param {
+    pool: AVE
+    kernel_size: 3
+    stride: 2
+  }
+}
+
+layer {
+  name: "drop3/cifar"
+  type: "Dropout"
+  bottom: "pool3/cifar"
+  top: "pool3/cifar"
+  dropout_param {
+    dropout_ratio: 0.5
+  }
+}
+
+layer {
+  name: "conv4/cifar"
+  type: "Convolution"
+  bottom: "pool3/cifar"
+  top: "conv4/cifar"
+  param {
+    name: "conv4_w"
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    name: "conv4_b"
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 1024
+    pad: 1
+    kernel_size: 3
+    stride: 1
+    weight_filler {
+      type: "gaussian"
+      std: 0.01
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+layer {
+  name: "relu10/cifar"
+  type: "ReLU"
+  bottom: "conv4/cifar"
+  top: "conv4/cifar"
+}
+layer {
+  name: "cccp7/cifar"
+  type: "Convolution"
+  bottom: "conv4/cifar"
+  top: "cccp7/cifar"
+  param {
+    name: "cccp7_w"
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    name: "cccp7_b"
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 600
+    kernel_size: 1
+    weight_filler {
+      type: "gaussian"
+      std: 0.05
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+layer {
+  name: "relu11/cifar"
+  type: "ReLU"
+  bottom: "cccp7/cifar"
+  top: "cccp7/cifar"
+}
+layer {
+  name: "pool4/cifar"
+  type: "Pooling"
+  bottom: "cccp7/cifar"
+  top: "pool4/cifar"
+  pooling_param {
+    pool: AVE
+    kernel_size: 4
+    stride: 1
+  }
+}
+
+layer {
+  name: "split_pair_s/cifar"
+  type: "Slice"
+  bottom: "pool4/cifar"
+  top: "slice_s1/cifar"
+  top: "slice_s2/cifar"
+  top: "slice_s3/cifar"
+  top: "slice_s4/cifar"
+  top: "slice_s5/cifar"
+  top: "slice_s6/cifar"
+  top: "slice_s7/cifar"
+  top: "slice_s8/cifar"
+  top: "slice_s9/cifar"
+  top: "slice_s10/cifar"
+  top: "slice_s11/cifar"
+  top: "slice_s12/cifar"
+  slice_param {
+    slice_dim: 1
+    slice_point: 50
+    slice_point: 100
+    slice_point: 150
+    slice_point: 200
+    slice_point: 250
+    slice_point: 300
+    slice_point: 350
+    slice_point: 400
+    slice_point: 450
+    slice_point: 500
+    slice_point: 550
+  }
+}
+layer {
+  name: "ip_s1/cifar"
+  type: "InnerProduct"
+  bottom: "slice_s1/cifar"
+  top: "hash_s1/cifar"
+  param {
+    name: "ip_1_w"
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    name: "ip_1_b"
+    lr_mult: 2
+    decay_mult: 0
+  }
+  inner_product_param {
+    num_output: 1
+    weight_filler {
+      type: "gaussian"
+      std: 0.1
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "sigmoid_s1/cifar"
+  type: "Sigmoid"
+  bottom: "hash_s1/cifar"
+  top: "hash_s1/cifar"
+}
+
+layer {
+  name: "ip_s2/cifar"
+  type: "InnerProduct"
+  bottom: "slice_s2/cifar"
+  top: "hash_s2/cifar"
+  param {
+    name: "ip_2_w"
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    name: "ip_2_b"
+    lr_mult: 2
+    decay_mult: 0
+  }
+  inner_product_param {
+    num_output: 1
+    weight_filler {
+      type: "gaussian"
+      std: 0.1
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "sigmoid_s2/cifar"
+  type: "Sigmoid"
+  bottom: "hash_s2/cifar"
+  top: "hash_s2/cifar"
+}
+
+layer {
+  name: "ip_s3/cifar"
+  type: "InnerProduct"
+  bottom: "slice_s3/cifar"
+  top: "hash_s3/cifar"
+  param {
+    name: "ip_3_w"
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    name: "ip_3_b"
+    lr_mult: 2
+    decay_mult: 0
+  }
+  inner_product_param {
+    num_output: 1
+    weight_filler {
+      type: "gaussian"
+      std: 0.1
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "sigmoid_s3/cifar"
+  type: "Sigmoid"
+  bottom: "hash_s3/cifar"
+  top: "hash_s3/cifar"
+}
+
+layer {
+  name: "ip_s4/cifar"
+  type: "InnerProduct"
+  bottom: "slice_s4/cifar"
+  top: "hash_s4/cifar"
+  param {
+    name: "ip_4_w"
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    name: "ip_4_b"
+    lr_mult: 2
+    decay_mult: 0
+  }
+  inner_product_param {
+    num_output: 1
+    weight_filler {
+      type: "gaussian"
+      std: 0.1
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "sigmoid_s4/cifar"
+  type: "Sigmoid"
+  bottom: "hash_s4/cifar"
+  top: "hash_s4/cifar"
+}
+
+layer {
+  name: "ip_s5/cifar"
+  type: "InnerProduct"
+  bottom: "slice_s5/cifar"
+  top: "hash_s5/cifar"
+  param {
+    name: "ip_5_w"
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    name: "ip_5_b"
+    lr_mult: 2
+    decay_mult: 0
+  }
+  inner_product_param {
+    num_output: 1
+    weight_filler {
+      type: "gaussian"
+      std: 0.1
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "sigmoid_s5/cifar"
+  type: "Sigmoid"
+  bottom: "hash_s5/cifar"
+  top: "hash_s5/cifar"
+}
+
+layer {
+  name: "ip_s6/cifar"
+  type: "InnerProduct"
+  bottom: "slice_s6/cifar"
+  top: "hash_s6/cifar"
+  param {
+    name: "ip_6_w"
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    name: "ip_6_b"
+    lr_mult: 2
+    decay_mult: 0
+  }
+  inner_product_param {
+    num_output: 1
+    weight_filler {
+      type: "gaussian"
+      std: 0.1
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "sigmoid_s6/cifar"
+  type: "Sigmoid"
+  bottom: "hash_s6/cifar"
+  top: "hash_s6/cifar"
+}
+
+layer {
+  name: "ip_s7/cifar"
+  type: "InnerProduct"
+  bottom: "slice_s7/cifar"
+  top: "hash_s7/cifar"
+  param {
+    name: "ip_7_w"
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    name: "ip_7_b"
+    lr_mult: 2
+    decay_mult: 0
+  }
+  inner_product_param {
+    num_output: 1
+    weight_filler {
+      type: "gaussian"
+      std: 0.1
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "sigmoid_s7/cifar"
+  type: "Sigmoid"
+  bottom: "hash_s7/cifar"
+  top: "hash_s7/cifar"
+}
+
+layer {
+  name: "ip_s8/cifar"
+  type: "InnerProduct"
+  bottom: "slice_s8/cifar"
+  top: "hash_s8/cifar"
+  param {
+    name: "ip_8_w"
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    name: "ip_8_b"
+    lr_mult: 2
+    decay_mult: 0
+  }
+  inner_product_param {
+    num_output: 1
+    weight_filler {
+      type: "gaussian"
+      std: 0.1
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "sigmoid_s8/cifar"
+  type: "Sigmoid"
+  bottom: "hash_s8/cifar"
+  top: "hash_s8/cifar"
+}
+
+layer {
+  name: "ip_s9/cifar"
+  type: "InnerProduct"
+  bottom: "slice_s9/cifar"
+  top: "hash_s9/cifar"
+  param {
+    name: "ip_9_w"
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    name: "ip_9_b"
+    lr_mult: 2
+    decay_mult: 0
+  }
+  inner_product_param {
+    num_output: 1
+    weight_filler {
+      type: "gaussian"
+      std: 0.1
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "sigmoid_s9/cifar"
+  type: "Sigmoid"
+  bottom: "hash_s9/cifar"
+  top: "hash_s9/cifar"
+}
+
+layer {
+  name: "ip_s10/cifar"
+  type: "InnerProduct"
+  bottom: "slice_s10/cifar"
+  top: "hash_s10/cifar"
+  param {
+    name: "ip_10_w"
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    name: "ip_10_b"
+    lr_mult: 2
+    decay_mult: 0
+  }
+  inner_product_param {
+    num_output: 1
+    weight_filler {
+      type: "gaussian"
+      std: 0.1
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "sigmoid_s10/cifar"
+  type: "Sigmoid"
+  bottom: "hash_s10/cifar"
+  top: "hash_s10/cifar"
+}
+
+layer {
+  name: "ip_s11/cifar"
+  type: "InnerProduct"
+  bottom: "slice_s11/cifar"
+  top: "hash_s11/cifar"
+  param {
+    name: "ip_11_w"
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    name: "ip_11_b"
+    lr_mult: 2
+    decay_mult: 0
+  }
+  inner_product_param {
+    num_output: 1
+    weight_filler {
+      type: "gaussian"
+      std: 0.1
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "sigmoid_s11/cifar"
+  type: "Sigmoid"
+  bottom: "hash_s11/cifar"
+  top: "hash_s11/cifar"
+}
+
+layer {
+  name: "ip_s12/cifar"
+  type: "InnerProduct"
+  bottom: "slice_s12/cifar"
+  top: "hash_s12/cifar"
+  param {
+    name: "ip_12_w"
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    name: "ip_12_b"
+    lr_mult: 2
+    decay_mult: 0
+  }
+  inner_product_param {
+    num_output: 1
+    weight_filler {
+      type: "gaussian"
+      std: 0.1
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "sigmoid_s12/cifar"
+  type: "Sigmoid"
+  bottom: "hash_s12/cifar"
+  top: "hash_s12/cifar"
+}
+layer {
+  name: "concat_pair_s1/cifar"
+  type: "Concat"
+  bottom: "hash_s1/cifar"
+  bottom: "hash_s2/cifar"
+  bottom: "hash_s3/cifar"
+  bottom: "hash_s4/cifar"
+  bottom: "hash_s5/cifar"
+  bottom: "hash_s6/cifar"
+  bottom: "hash_s7/cifar"
+  bottom: "hash_s8/cifar"
+  bottom: "hash_s9/cifar"
+  bottom: "hash_s10/cifar"
+  bottom: "hash_s11/cifar"
+  bottom: "hash_s12/cifar"
+  top: "concat_s1/cifar"
+  concat_param {
+    concat_dim: 1
+  }
+}
