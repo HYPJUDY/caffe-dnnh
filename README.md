@@ -3,6 +3,8 @@ This is a caffe version implementation of a hash network(DNNH/NINH) for similari
 The hash network is based on this paper:
 [Hanjiang Lai, Yan Pan, Ye Liu, and Shuicheng Yan. Simultaneous feature learning and hash coding with deep neural networks, CVPR 2015](https://arxiv.org/abs/1504.03410).
 
+For more details about the motivation, approaches, implementation, results&analysis and further improvements, please read [my post](https://hypjudy.github.io/2017/04/14/caffe-dnnh/). Any feedback is welcome!
+
 # My work
 * **Deploy:** Given the definition of loss layer, deploy the deep hashing pipeline on linux.
 * **Train:** Write prototxt to define dnnh and bash files to execute for training on preprocessed triplet CIFAR-10 dataset.
@@ -42,8 +44,8 @@ Then follow the official [Installation instructions](http://caffe.berkeleyvision
 cd caffe-dnnh/runtime/12bit # or: 24bit, 48bit
 sh ./run_train.sh # or: sh ./resume_train.sh
 ```
-
-`run_train.sh` train deep hash neural network defined in prototxt and result models are stored in path `caffe-dnnh/runtime/model`. Read corresponding files for more details. You can modify parameters/paths or anything else.
+ 
+`run_train.sh` train deep hash neural network defined in prototxt and result models are stored in path `caffe-dnnh/runtime/model`. You can modify parameters like max iteration, snapshot in solver prototxt. Also note that tens of thousands iterations take time, so you are recommended to train with GPU mode in the background like `nohup sh ./run_train.sh &` and check output with command `tail -100 nohup.out`. Read corresponding files for more details.
 
 ## Test
 ``` bash
@@ -51,15 +53,15 @@ cd caffe-dnnh/runtime/12bit # or: 24bit, 48bit
 sh ./run_test.sh
 ```
 
-`run_test.sh`: uses forward pass of dnnh defined in `test12_query.prototxt` and `test12_pool.prototxt` to encode query images and pool set images. Then compile and run `CAFFE-ROOT/runtime/evaluate_map.cpp` for image retrieval evaluation. Read corresponding files for more details. You can modify parameters/paths or anything else.
-
-
+`run_test.sh`: uses forward pass of dnnh defined in `test12_query.prototxt` and `test12_pool.prototxt` to encode query images and pool set images. Then compile and run `CAFFE-ROOT/runtime/evaluate_map.cpp` for image retrieval evaluation. You can modify parameters (e.g. `ITER` in `run_test.sh` and `top_neighbor_num` in `evaluate_map.cpp`). Read corresponding files for more details.
 
 
 # Credit
+I really appreciate their works!
+
 1. [Dr.Tao Mei](https://www.microsoft.com/en-us/research/people/tmei/) draw an outline of this research for me.
 2. The triplet ranking hinge loss layer is implemented by @FuchenUSTC in [his caffe repository](https://github.com/FuchenUSTC/caffe).
-3. Preprocessed triplet CIFAR-10 dataset in `caffe-dnnh/runtime/cifar_hash_dataset` is shared by @FuchenUSTC. Read [my post#dataset]() for more details about its structure so as to understand the structure of DNNH defined in prototxt.
+3. Preprocessed triplet CIFAR-10 dataset in `caffe-dnnh/runtime/cifar_hash_dataset` is shared by @FuchenUSTC. Read [my post#dataset](https://hypjudy.github.io/2017/04/14/caffe-dnnh/#dataset) for more details about its structure so as to understand the structure of DNNH defined in prototxt.
 4. Networks structure and parameters are refered to [codes_triplet_hashing1.zip](http://www.scholat.com/portaldownloadFile.html?fileId=4909) provide by first author [Hanjiang Lai](http://www.scholat.com/laihanj).
 
 

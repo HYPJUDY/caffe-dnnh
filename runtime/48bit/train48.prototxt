@@ -1,7 +1,7 @@
 name: "CIFAR10_full"
 layer {
   name: "cifar"
-  type: "Data"
+  type: "Data" 
   top: "data/cifar"
   data_param {
     source: "../cifar_hash_dataset/cifar_triplet_train_lvdb"
@@ -25,7 +25,7 @@ layer {name: "slice_triplet" type: "Slice" bottom: "data/cifar"
 layer {
   name: "conv1/cifar"
   type: "Convolution"
-  bottom: "data_2"
+  bottom: "data"
   top: "conv1/cifar"
   param {
     name: "conv1_w"
@@ -2123,7 +2123,7 @@ layer {
 layer {
   name: "conv1/cifar2"
   type: "Convolution"
-  bottom: "data_3"
+  bottom: "data_2"
   top: "conv1/cifar2"
   param {
     name: "conv1_w"
@@ -4220,7 +4220,7 @@ layer {
 layer {
   name: "conv1/cifar3"
   type: "Convolution"
-  bottom: "data"
+  bottom: "data_3"
   top: "conv1/cifar3"
   param {
     name: "conv1_w"

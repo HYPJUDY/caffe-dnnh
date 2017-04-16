@@ -1,6 +1,6 @@
 RUN_BIN=../../build/tools
 SCRIPT=../../runtime
-ITER=80000
+ITER=80000 # which model you want to test with
 HASH_CODE_BIT=12
 echo "Run testing ${HASH_CODE_BIT}bit deep neural network..."
 
