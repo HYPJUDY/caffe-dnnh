@@ -10,6 +10,7 @@ For more details about the motivation, approaches, implementation, results&analy
 * **Train:** Write prototxt to define dnnh and bash files to execute for training on preprocessed triplet CIFAR-10 dataset.
 * **Test/Evaluate:** Write prototxt to encode images and bash files to execute for image retrieval. Implement the metric of mean average precision (mAP) for evaluation.
 * **Analysis:** Draw performances for 12-bit, 24-bit and 48-bit hash code and make some analysis.
+* **Presentation:** Prepare a slide to show my work.
 
 # How to run
 ## Deploy
@@ -56,7 +57,7 @@ sh ./run_test.sh
 `run_test.sh`: uses forward pass of dnnh defined in `test12_query.prototxt` and `test12_pool.prototxt` to encode query images and pool set images. Then compile and run `CAFFE-ROOT/runtime/evaluate_map.cpp` for image retrieval evaluation. You can modify parameters (e.g. `ITER` in `run_test.sh` and `top_neighbor_num` in `evaluate_map.cpp`). Read corresponding files for more details.
 
 
-# Credit
+# Credits
 I really appreciate their works!
 
 1. [Dr.Tao Mei](https://www.microsoft.com/en-us/research/people/tmei/) draw an outline of this research for me.
