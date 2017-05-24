@@ -10,11 +10,11 @@ For more details about the motivation, approaches, implementation, results&analy
 * **Train:** Write prototxt to define dnnh and bash files to execute for training on preprocessed triplet CIFAR-10 dataset.
 * **Test/Evaluate:** Write prototxt to encode images and bash files to execute for image retrieval. Implement the metric of mean average precision (mAP) for evaluation.
 * **Analysis:** Draw performances for 12-bit, 24-bit and 48-bit hash code and make some analysis.
-* **Presentation:** Prepare a slide to show my work.
+* **Presentation:** Prepare a [slide](https://github.com/HYPJUDY/caffe-dnnh/blob/master/YupanHuang-Similarity-Based-Visual-Search.pdf) to show my work.
 
 # How to run
 ## Deploy
-You may directly download my caffe-dnnh zip and deploy (may need to fix errors dut to different environment and version). Or you can follow the instructions to add files/contents to the [newest caffe release](https://github.com/BVLC/caffe). Here `CAFFE-ROOT` refers to your root caffe directory and `caffe-dnnh` to mine.
+You may directly download my caffe-dnnh zip and deploy (may need to fix errors due to different environment and version). Or you can follow the instructions to add files/contents to the [newest caffe release](https://github.com/BVLC/caffe). Here `CAFFE-ROOT` refers to your root caffe directory and `caffe-dnnh` to mine.
 1. Add file `caffe-dnnh/src/caffe/layers/triplet_ranking_hinge_loss_layer.cpp` to path `CAFFE-ROOT/src/caffe/layers` and file `caffe-dnnh/include/caffe/layers/triplet_ranking_hinge_loss_layer.hpp` to path `CAFFE-ROOT/include/caffe/layers`.
 2. Modify file `CAFFE-ROOT/src/caffe/proto/caffe.proto`:
    * Add the following code directly.
@@ -30,7 +30,8 @@ message TripletRankingHingeLossParameter{
    * Find `message LayerParameter`, add `optional TripletRankingHingeLossParameter triplet_ranking_hinge_loss_param = 151;` in it.
    * Find `message V1LayerParameter`, add `optional TripletRankingHingeLossParameter triplet_ranking_hinge_loss_param = 43;` in it.
    * Find `enum LayerType` in `message V1LayerParameter`, add `TRIPLET_RANKING_HINGE_LOSS=40;` in it.
-Attention: the number above like 151, 43 are ID and should not be conflict with others. Search `next available` in `caffe.proto` you will find comment like `// SolverParameter next available ID: 42 (last added: layer_wise_reduce)` and `// LayerParameter next available layer-specific ID: 147 (last added: recurrent_param)`. Use next available ID and update the comment.
+
+  Attention: the number above like 151, 43 are ID and should not be conflict with others. Search `next available` in `caffe.proto` you will find comment like `// SolverParameter next available ID: 42 (last added: layer_wise_reduce)` and `// LayerParameter next available layer-specific ID: 147 (last added: recurrent_param)`. Use next available ID and update the comment.
 3. Add folder `caffe-dnnh/runtime` to path `CAFFE-ROOT/`.
 4. Modify file `CAFFE-ROOT/tools/caffe.cpp` refer to `caffe-dnnh/tools/caffe.cpp`: Search `++++++++++` in `caffe-dnnh/tools/caffe.cpp` and you will find what I add.
 
