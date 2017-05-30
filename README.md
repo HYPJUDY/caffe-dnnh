@@ -13,6 +13,11 @@ For more details about the motivation, approaches, implementation, results&analy
 * **Presentation:** Prepare a [slide](https://github.com/HYPJUDY/caffe-dnnh/blob/master/YupanHuang-Similarity-Based-Visual-Search.pdf) to show my work.
 
 # How to run
+## Dataset
+Hash training needs triplet data input. Here I use the triplet CIFAR-10 dataset. To obtain it:
+* You can directly download the related zip file `cifar_hash_dataset.7z` from [BaiduYun](http://pan.baidu.com/s/1i5FTZ61) and extract it into `caffe-dnnh\runtime\cifar_hash_dataset`.
+* Or you can process the data by yourself. Scripts are provided for reference in `caffe-dnnh\runtime\cifar_hash_dataset_process_scripts\`.
+
 ## Deploy
 You may directly download my caffe-dnnh zip and deploy (may need to fix errors due to different environment and version). Or you can follow the instructions to add files/contents to the [newest caffe release](https://github.com/BVLC/caffe). Here `CAFFE-ROOT` refers to your root caffe directory and `caffe-dnnh` to mine.
 1. Add file `caffe-dnnh/src/caffe/layers/triplet_ranking_hinge_loss_layer.cpp` to path `CAFFE-ROOT/src/caffe/layers` and file `caffe-dnnh/include/caffe/layers/triplet_ranking_hinge_loss_layer.hpp` to path `CAFFE-ROOT/include/caffe/layers`.
@@ -63,7 +68,7 @@ I really appreciate their works!
 
 1. [Dr.Tao Mei](https://www.microsoft.com/en-us/research/people/tmei/) draw an outline of this research for me.
 2. The triplet ranking hinge loss layer is implemented by @FuchenUSTC in [his caffe repository](https://github.com/FuchenUSTC/caffe).
-3. Preprocessed triplet CIFAR-10 dataset in `caffe-dnnh/runtime/cifar_hash_dataset` is shared by @FuchenUSTC. Read [my post#dataset](https://hypjudy.github.io/2017/04/14/caffe-dnnh/#dataset) for more details about its structure so as to understand the structure of DNNH defined in prototxt.
+3. Preprocessed triplet CIFAR-10 dataset and related scripts are shared by [@FuchenUSTC](https://github.com/FuchenUSTC). Read [my post#dataset](https://hypjudy.github.io/2017/04/14/caffe-dnnh/#dataset) for more details about its structure so as to understand the structure of DNNH defined in prototxt.
 4. Networks structure and parameters are refered to [codes_triplet_hashing1.zip](http://www.scholat.com/portaldownloadFile.html?fileId=4909) provide by first author [Hanjiang Lai](http://www.scholat.com/laihanj).
 
 
