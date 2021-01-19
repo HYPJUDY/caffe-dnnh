@@ -15,7 +15,7 @@ For more details about the motivation, approaches, implementation, results&analy
 # How to run
 ## Dataset
 Hash training needs triplet data input. Here I use the triplet CIFAR-10 dataset. To obtain it:
-* You can directly download the related zip file `cifar_hash_dataset.7z` from [BaiduYun](http://pan.baidu.com/s/1i5FTZ61) and extract it into `caffe-dnnh\runtime\cifar_hash_dataset`.
+* You can directly download the related zip file `cifar_hash_dataset.7z` from [BaiduYun](http://pan.baidu.com/s/1i5FTZ61) or [OneDrive](https://mail2sysueducn-my.sharepoint.com/:u:/g/personal/huangyp28_mail2_sysu_edu_cn/EfYgc97lACNIiY2kP_95aAoB_BPFMYBnuude8vA12wG3Tg?e=mgjKmg) and extract it into `caffe-dnnh\runtime\cifar_hash_dataset`.
 * Or you can process the data by yourself. Scripts are provided for reference in `caffe-dnnh\runtime\cifar_hash_dataset_process_scripts\`.
 
 ## Deploy
